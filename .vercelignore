@@ -1,0 +1,6 @@
+# BH
+
+# Files and folders for Vercel to ignore from the deployment process
+supabase
+readme.md
+nextjs/README.md
