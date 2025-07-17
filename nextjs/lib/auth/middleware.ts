@@ -1,7 +1,10 @@
+// BH
+
 import { z } from 'zod';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { getTeamForUser, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
+import { ActionStateCustom } from '@/lib/types';
 
 export type ActionState = {
   error?: string;
@@ -47,6 +50,25 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
     const result = schema.safeParse(Object.fromEntries(formData));
     if (!result.success) {
       return { error: result.error.errors[0].message };
+    }
+
+    return action(result.data, formData, user);
+  };
+}
+
+export function validatedActionWithUserCustom<S extends z.ZodType<any, any>, T>(
+  schema: S,
+  action: ValidatedActionWithUserFunction<S, T>
+) {
+  return async (prevState: ActionStateCustom, formData: FormData) => {
+    const user = await getUser();
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
+    const result = schema.safeParse(Object.fromEntries(formData));
+    if (!result.success) {
+      return { error: true, message: result.error.errors[0].message }
     }
 
     return action(result.data, formData, user);

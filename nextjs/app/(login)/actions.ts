@@ -23,8 +23,10 @@ import { createCheckoutSession } from '@/lib/payments/stripe';
 import { getUser, getUserWithTeam } from '@/lib/db/queries';
 import {
   validatedAction,
-  validatedActionWithUser
+  validatedActionWithUser,
+  validatedActionWithUserCustom,
 } from '@/lib/auth/middleware';
+import { error } from 'console';
 
 async function logActivity(
   teamId: number | null | undefined,
@@ -455,5 +457,28 @@ export const inviteTeamMember = validatedActionWithUser(
     // await sendInvitationEmail(email, userWithTeam.team.name, role)
 
     return { success: 'Invitation sent successfully' };
+  }
+);
+
+export const generateShortLink = validatedActionWithUserCustom(
+  inviteTeamMemberSchema,
+  async (data, _, user) => {
+    try {
+      const { email, role } = data;
+
+      // Generate unique short link
+      // ...
+
+      // Transform returned data to app internal type
+      // ...
+
+      return { error: false, message: 'Short link generated successfully' };
+    }
+    catch(err) {
+      let message = 'Unknown Error'
+      if (error instanceof Error) message = error.message
+      return { error: true, message: message }
+    }
+
   }
 );
