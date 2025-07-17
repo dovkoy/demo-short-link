@@ -201,8 +201,8 @@ function InviteTeamMember() {
         <form action={genShortLinkAction} className="space-y-4">
           <div>
             <Input
-              id="long-url"
-              name="long-url"
+              id="long_url"
+              name="long_url"
               type="url"
               placeholder="Enter URL to shorten"
               required
@@ -236,7 +236,7 @@ function InviteTeamMember() {
       {!isOwner && (
         <CardFooter>
           <p className="text-sm text-muted-foreground">
-            You must be a team owner to invite new members.
+            You must be a team owner to create new short links.
           </p>
         </CardFooter>
       )}
