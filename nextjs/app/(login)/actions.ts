@@ -9,6 +9,7 @@ import {
   teams,
   teamMembers,
   activityLogs,
+  shortLinks,
   type NewUser,
   type NewTeam,
   type NewTeamMember,
@@ -398,6 +399,10 @@ const inviteTeamMemberSchema = z.object({
   role: z.enum(['member', 'owner'])
 });
 
+const generateShortLinkSchema = z.object({
+  'long_url': z.string().url('Invalid URL'),
+});
+
 export const inviteTeamMember = validatedActionWithUser(
   inviteTeamMemberSchema,
   async (data, _, user) => {
@@ -461,10 +466,12 @@ export const inviteTeamMember = validatedActionWithUser(
 );
 
 export const generateShortLink = validatedActionWithUserCustom(
-  inviteTeamMemberSchema,
+  generateShortLinkSchema,
   async (data, _, user) => {
     try {
-      const { email, role } = data;
+      const { long_url } = data;
+      console.log('data:', data)
+      console.log('long_url:', long_url)
 
       // Generate unique short link
       // ...
