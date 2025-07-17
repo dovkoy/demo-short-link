@@ -201,8 +201,8 @@ function InviteTeamMember() {
         <form action={genShortLinkAction} className="space-y-4">
           <div>
             <Input
-              id="long-url"
-              name="long-url"
+              id="long_url"
+              name="long_url"
               type="url"
               placeholder="Enter URL to shorten"
               required
