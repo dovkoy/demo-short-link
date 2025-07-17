@@ -236,7 +236,7 @@ function InviteTeamMember() {
       {!isOwner && (
         <CardFooter>
           <p className="text-sm text-muted-foreground">
-            You must be a team owner to invite new members.
+            You must be a team owner to create new short links.
           </p>
         </CardFooter>
       )}
