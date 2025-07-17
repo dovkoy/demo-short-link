@@ -16,7 +16,7 @@ export const shortLinks = pgTable('short_links', {
   .notNull()
   .references(() => users.id),
   name: varchar('name', { length: 255 }),
-  alias: text('alias').notNull().unique(),
+  alias: text('alias').unique(),
   longLink: text('long_link').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
