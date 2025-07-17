@@ -23,11 +23,10 @@ I started with:
 Please check the Next.js template [readme](nextjs/README.md) for details about that project and how to get it running locally, if so desired.
 
 ### Step 2
-Created a Github Project, and created the first core tickets:
-- [#1](https://github.com/dovkoy/demo-short-link/issues/1)
-- [#2](https://github.com/dovkoy/demo-short-link/issues/2)
-- [#3](https://github.com/dovkoy/demo-short-link/issues/3)
-- [#4](https://github.com/dovkoy/demo-short-link/issues/4)
+Created a Github Project and created a prioritized backlog of issues for the initial features.
+
+### Step 3
+Submitted PRs to close issues, merging only when checks pass and preview/branch deployment confirmed working.
 
 ## License
 
