@@ -176,7 +176,7 @@ function TeamMembers() {
 
 function InviteTeamMemberSkeleton() {
   return (
-    <Card className="h-[260px]">
+    <Card className="mb-8 h-[140px]">
       <CardHeader>
         <CardTitle>Create short link</CardTitle>
       </CardHeader>
@@ -200,9 +200,6 @@ function InviteTeamMember() {
       <CardContent>
         <form action={genShortLinkAction} className="space-y-4">
           <div>
-            {/* <Label htmlFor="long-url" className="mb-2">
-              URL
-            </Label> */}
             <Input
               id="long-url"
               name="long-url"
