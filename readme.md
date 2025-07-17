@@ -24,10 +24,10 @@ Please check the Next.js template [readme](nextjs/README.md) for details about t
 
 ### Step 2
 Created a Github Project, and created the first core tickets:
-- [#1](https://github.com/dovkoy/Demo-short-link/issues/1)
-- [#2](https://github.com/dovkoy/Demo-short-link/issues/2)
-- [#3](https://github.com/dovkoy/Demo-short-link/issues/3)
-- [#4](https://github.com/dovkoy/Demo-short-link/issues/4)
+- [#1](https://github.com/dovkoy/demo-short-link/issues/1)
+- [#2](https://github.com/dovkoy/demo-short-link/issues/2)
+- [#3](https://github.com/dovkoy/demo-short-link/issues/3)
+- [#4](https://github.com/dovkoy/demo-short-link/issues/4)
 
 ## License
 
