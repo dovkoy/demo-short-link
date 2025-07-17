@@ -1,3 +1,5 @@
+// BH
+
 import {
   pgTable,
   serial,
@@ -7,6 +9,17 @@ import {
   integer,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+
+export const shortLinks = pgTable('short_links', {
+  id: serial('id').primaryKey(),
+  createdByUserId: integer('user_id')
+  .notNull()
+  .references(() => users.id),
+  name: varchar('name', { length: 255 }),
+  alias: text('alias').notNull().unique(),
+  longLink: text('long_link').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
