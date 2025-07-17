@@ -470,16 +470,18 @@ export const generateShortLink = validatedActionWithUserCustom(
   async (data, _, user) => {
     try {
       const { long_url } = data;
-      console.log('data:', data)
-      console.log('long_url:', long_url)
+     
+      const newShortLink = await db.insert(shortLinks).values({ 
+          createdByUserId: user.id,
+          longLink: long_url
+         }).returning();
+        
+      console.log('newShortLink:', newShortLink[0])
+      if (!newShortLink[0]) {
+        throw Error('Failed to create short link')
+      }
 
-      // Generate unique short link
-      // ...
-
-      // Transform returned data to app internal type
-      // ...
-
-      return { error: false, message: 'Short link generated successfully' };
+      return { error: false, message: `Short link generated successfully: ~${newShortLink[0].alias}~` };
     }
     catch(err) {
       let message = 'Unknown Error'
