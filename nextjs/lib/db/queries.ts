@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
+import { activityLogs, teamMembers, teams, users, shortLinks } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
@@ -97,6 +97,23 @@ export async function getActivityLogs() {
     .where(eq(activityLogs.userId, user.id))
     .orderBy(desc(activityLogs.timestamp))
     .limit(10);
+}
+
+export async function getShortLinksForUser() {
+  const user = await getUser()
+  if (!user) return null;
+
+  const createdShortLinks = await db.select({
+    id: shortLinks.id,
+    name: shortLinks.name,
+    alias: shortLinks.alias,
+    longLink: shortLinks.longLink,
+    createdAt: shortLinks.createdAt
+  })
+  .from(shortLinks)
+  .where(eq(shortLinks.createdByUserId, user.id));
+
+  return createdShortLinks || null;
 }
 
 export async function getTeamForUser() {
