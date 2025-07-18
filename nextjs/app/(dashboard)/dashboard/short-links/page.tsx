@@ -43,7 +43,7 @@ function SubscriptionSkeleton() {
 
 function ManageShortLinks() {
   const { data: createdShortLinks } = useSWR<ShortLink[]>('/api/shortlinks', fetcher);
-
+  
   return (
     <Card className="mt-8">
       <CardHeader>
@@ -190,10 +190,10 @@ function InviteTeamMemberSkeleton() {
   );
 }
 
-function InviteTeamMember() {
+function ShortLinkForm() {
   const { data: user } = useSWR<User>('/api/user', fetcher);
   const isOwner = user?.role === 'owner';
-  const [inviteState, genShortLinkAction, isInvitePending] = useActionState<
+  const [genShortLinkState, genShortLinkAction, isGenShortLinkPending] = useActionState<
     ActionStateCustom,
     FormData
   >(generateShortLink, { error: false });
@@ -214,14 +214,14 @@ function InviteTeamMember() {
               required
             />
           </div>
-          {inviteState?.error && (
-            <p className="text-red-500">{inviteState.message}</p>
+          {genShortLinkState?.error && (
+            <p className="text-red-500">{genShortLinkState.message}</p>
           )}
-          {!inviteState?.error && inviteState?.message && (
+          {!genShortLinkState?.error && genShortLinkState?.message && (
             <>
               <p className="text-green-500">{'Short link created: '}
-                <a className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" href={`${BASE_URL}/${inviteState.message.split('~')[1]}`}>
-                  {inviteState.message.split('~')[1]}
+                <a className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" href={`${BASE_URL}/${genShortLinkState.message.split('~')[1]}`}>
+                  {genShortLinkState.message.split('~')[1]}
                 </a>
               </p>
             </>
@@ -229,9 +229,9 @@ function InviteTeamMember() {
           <Button
             type="submit"
             className="bg-orange-500 hover:bg-orange-600 text-white"
-            disabled={isInvitePending || !isOwner}
+            disabled={isGenShortLinkPending || !isOwner}
           >
-            {isInvitePending ? (
+            {isGenShortLinkPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Creating...
@@ -261,7 +261,7 @@ export default function ShortLinksPage() {
     <section className="flex-1 p-4 lg:p-8">
       <h1 className="text-lg lg:text-2xl font-medium mb-6">Short Links</h1>
       <Suspense fallback={<InviteTeamMemberSkeleton />}>
-        <InviteTeamMember />
+        <ShortLinkForm />
       </Suspense>
       <Suspense fallback={<SubscriptionSkeleton />}>
         <ManageShortLinks />
