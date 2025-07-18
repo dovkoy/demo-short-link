@@ -22,6 +22,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { ActionStateCustom } from '@/lib/types';
+import { BASE_URL } from '@/lib/utils';
 
 type ActionState = {
   error?: string;
@@ -211,8 +212,14 @@ function InviteTeamMember() {
           {inviteState?.error && (
             <p className="text-red-500">{inviteState.message}</p>
           )}
-          {!inviteState?.error && (
-            <p className="text-green-500">{inviteState.message}</p>
+          {!inviteState?.error && inviteState?.message && (
+            <>
+              <p className="text-green-500">{'Short link created: '}
+                <a className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" href={`${BASE_URL}/${inviteState.message.split('~')[1]}`}>
+                  {inviteState.message.split('~')[1]}
+                </a>
+              </p>
+            </>
           )}
           <Button
             type="submit"
