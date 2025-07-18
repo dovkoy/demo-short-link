@@ -15,7 +15,7 @@ export default async function Page({
   // fetch record
   const { alias } = await params;
   const [ result ] = await db.select({
-      destinationUrl: shortLinks.longLink
+      longLink: shortLinks.longLink
     })
     .from(shortLinks)
     .where(eq(shortLinks.alias, alias))
@@ -23,7 +23,7 @@ export default async function Page({
 
   if (result) {
     // tbd analytics
-    return redirect(result.destinationUrl)
+    return redirect(result.longLink)
   } else {
     notFound()
   }
