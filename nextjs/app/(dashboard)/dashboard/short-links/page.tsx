@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card';
 import { customerPortalAction } from '@/lib/payments/actions';
 import { useActionState } from 'react';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
+import { TeamDataWithMembers, User, ShortLink } from '@/lib/db/schema';
 import { removeTeamMember, generateShortLink } from '@/app/(login)/actions';
 import useSWR from 'swr';
 import { Suspense } from 'react';
@@ -41,31 +41,36 @@ function SubscriptionSkeleton() {
   );
 }
 
-function ManageSubscription() {
-  const { data: teamData } = useSWR<TeamDataWithMembers>('/api/team', fetcher);
+function ManageShortLinks() {
+  const { data: createdShortLinks } = useSWR<ShortLink[]>('/api/shortlinks', fetcher);
 
   return (
     <Card className="mt-8">
       <CardHeader>
         <CardTitle>My short links</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-            <div className="mb-4 sm:mb-0">
-              <p className="font-medium">
-                Short link for URL ... (TBD)
-              </p>
-              <p className="text-sm text-muted-foreground">
-                TBD
-              </p>
+      { createdShortLinks ? ( 
+          <CardContent>
+            <div className="space-y-4">
+              {createdShortLinks.map(shortLink =>
+                <div key={shortLink.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                  <div className="mb-4 sm:mb-0">
+                    <a className="font-medium text-blue-500 underline" target="_blank" rel="noopener noreferrer" href={`${BASE_URL}/${shortLink.alias}`}>
+                      {shortLink.alias}
+                    </a>
+                    <p className="text-sm text-muted-foreground">
+                      {shortLink.longLink}
+                    </p>
+                  </div>
+                  <Button type="submit" variant="outline" onClick={() => alert('TBD')}>
+                    Manage
+                  </Button>
+                </div>
+              )}
             </div>
-            <Button type="submit" variant="outline" onClick={() => alert('This is TBD')}>
-              Manage/Delete
-            </Button>
-          </div>
-        </div>
-      </CardContent>
+          </CardContent>
+        ) : createdShortLinks !== undefined ? "You haven't created any short links yet." : 'Loading...'
+      }
     </Card>
   );
 }
@@ -259,7 +264,7 @@ export default function ShortLinksPage() {
         <InviteTeamMember />
       </Suspense>
       <Suspense fallback={<SubscriptionSkeleton />}>
-        <ManageSubscription />
+        <ManageShortLinks />
       </Suspense>
     </section>
   );
