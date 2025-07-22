@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card';
 import { customerPortalAction } from '@/lib/payments/actions';
 import { useActionState } from 'react';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
+import { TeamDataWithMembers, User, ShortLink } from '@/lib/db/schema';
 import { removeTeamMember, generateShortLink } from '@/app/(login)/actions';
 import useSWR from 'swr';
 import { Suspense } from 'react';
@@ -22,6 +22,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { ActionStateCustom } from '@/lib/types';
+import { BASE_URL } from '@/lib/utils';
 
 type ActionState = {
   error?: string;
@@ -40,31 +41,36 @@ function SubscriptionSkeleton() {
   );
 }
 
-function ManageSubscription() {
-  const { data: teamData } = useSWR<TeamDataWithMembers>('/api/team', fetcher);
-
+function ManageShortLinks() {
+  const { data: createdShortLinks } = useSWR<ShortLink[]>('/api/shortlinks', fetcher);
+  
   return (
     <Card className="mt-8">
       <CardHeader>
         <CardTitle>My short links</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-            <div className="mb-4 sm:mb-0">
-              <p className="font-medium">
-                Short link for URL ... (TBD)
-              </p>
-              <p className="text-sm text-muted-foreground">
-                TBD
-              </p>
+      { createdShortLinks ? ( 
+          <CardContent>
+            <div className="space-y-4">
+              {createdShortLinks.map(shortLink =>
+                <div key={shortLink.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                  <div className="mb-4 sm:mb-0">
+                    <a className="font-medium text-blue-500 underline" target="_blank" rel="noopener noreferrer" href={`${BASE_URL}/${shortLink.alias}`}>
+                      {shortLink.alias}
+                    </a>
+                    <p className="text-sm text-muted-foreground">
+                      {shortLink.longLink}
+                    </p>
+                  </div>
+                  <Button type="submit" variant="outline" onClick={() => alert('TBD')}>
+                    Manage
+                  </Button>
+                </div>
+              )}
             </div>
-            <Button type="submit" variant="outline" onClick={() => alert('This is TBD')}>
-              Manage/Delete
-            </Button>
-          </div>
-        </div>
-      </CardContent>
+          </CardContent>
+        ) : createdShortLinks !== undefined ? "You haven't created any short links yet." : 'Loading...'
+      }
     </Card>
   );
 }
@@ -184,10 +190,10 @@ function InviteTeamMemberSkeleton() {
   );
 }
 
-function InviteTeamMember() {
+function ShortLinkForm() {
   const { data: user } = useSWR<User>('/api/user', fetcher);
   const isOwner = user?.role === 'owner';
-  const [inviteState, genShortLinkAction, isInvitePending] = useActionState<
+  const [genShortLinkState, genShortLinkAction, isGenShortLinkPending] = useActionState<
     ActionStateCustom,
     FormData
   >(generateShortLink, { error: false });
@@ -208,18 +214,24 @@ function InviteTeamMember() {
               required
             />
           </div>
-          {inviteState?.error && (
-            <p className="text-red-500">{inviteState.message}</p>
+          {genShortLinkState?.error && (
+            <p className="text-red-500">{genShortLinkState.message}</p>
           )}
-          {!inviteState?.error && (
-            <p className="text-green-500">{inviteState.message}</p>
+          {!genShortLinkState?.error && genShortLinkState?.message && (
+            <>
+              <p className="text-green-500">{'Short link created: '}
+                <a className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" href={`${BASE_URL}/${genShortLinkState.message.split('~')[1]}`}>
+                  {genShortLinkState.message.split('~')[1]}
+                </a>
+              </p>
+            </>
           )}
           <Button
             type="submit"
             className="bg-orange-500 hover:bg-orange-600 text-white"
-            disabled={isInvitePending || !isOwner}
+            disabled={isGenShortLinkPending || !isOwner}
           >
-            {isInvitePending ? (
+            {isGenShortLinkPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Creating...
@@ -249,10 +261,10 @@ export default function ShortLinksPage() {
     <section className="flex-1 p-4 lg:p-8">
       <h1 className="text-lg lg:text-2xl font-medium mb-6">Short Links</h1>
       <Suspense fallback={<InviteTeamMemberSkeleton />}>
-        <InviteTeamMember />
+        <ShortLinkForm />
       </Suspense>
       <Suspense fallback={<SubscriptionSkeleton />}>
-        <ManageSubscription />
+        <ManageShortLinks />
       </Suspense>
     </section>
   );

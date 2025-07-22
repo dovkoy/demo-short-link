@@ -140,6 +140,7 @@ export type TeamDataWithMembers = Team & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
 };
+export type ShortLink = typeof shortLinks.$inferSelect;
 
 export enum ActivityType {
   SIGN_UP = 'SIGN_UP',
