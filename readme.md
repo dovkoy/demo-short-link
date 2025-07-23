@@ -4,6 +4,8 @@ B"H
 
 POC short link feature implemented with Next.js and Supabase Postgres.
 
+Project roadmap and progress is tracked [here](https://github.com/users/dovkoy/projects/11/views/2?query=sort%3Aupdated-desc+is%3Aopen).
+
 ## Quick Start
 
 Please use the UI to sign-up and experiment with the link shortening feature.
@@ -23,7 +25,7 @@ I started with:
 Please check the Next.js template [readme](nextjs/README.md) for details about that project and how to get it running locally, if so desired.
 
 ### Step 2
-Created a Github Project and created a prioritized backlog of issues for the initial features.
+Created a [Github Project](https://github.com/users/dovkoy/projects/11/views/2?query=sort%3Aupdated-desc+is%3Aopen) and created a prioritized backlog of issues for the initial features.
 
 ### Step 3
 Submitted PRs to close issues, merging only when checks pass and preview/branch deployment confirmed working.
